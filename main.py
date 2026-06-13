@@ -1,26 +1,34 @@
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
+import csv
+import os
+from GetPeopleCount import GetPeopleCount
+
+CSV_FILE = "gym_count.csv"
 
 
+def save_to_csv(timestamp, count):
+    file_exists = os.path.exists(CSV_FILE)
 
-url = "https://winpoweryouthpark.com.tw/%E5%A0%B4%E9%A4%A8%E4%BB%8B%E7%B4%B9/%E5%81%A5%E8%BA%AB%E6%88%BF%E5%8D%80/%E5%81%A5%E8%BA%AB%E4%B8%AD%E5%BF%83/"
+    with open(CSV_FILE, "a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.writer(f)
 
-response = requests.get(url, timeout=10)
+        if not file_exists:
+            writer.writerow(["timestamp", "count"])
 
-# 確認 request 成功
-response.raise_for_status()
+        writer.writerow([timestamp, count])
 
-html = response.text
 
-soup = BeautifulSoup(html, "html.parser")
+def main():
+    result = GetPeopleCount()
 
-counts = soup.select(".pcount")
+    if result is None:
+        print("沒有抓到體適能中心人數")
+        return
 
-for item in counts:
-    if "體適能中心" in item.text:
-        count = item.select_one(".notice").text.strip()
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{timestamp}] 人數：{count}")
+    timestamp, count = result
+    save_to_csv(timestamp, count)
 
-        break
+    print(f"[{timestamp}] 已儲存人數：{count}")
+
+
+if __name__ == "__main__":
+    main()
