@@ -19,8 +19,11 @@ def GetPeopleCount():
 
     for item in counts:
         if "體適能中心" in item.text:
-            count = item.select_one(".notice").text.strip()
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            weekday = datetime.now().weekday()
+            hour = datetime.now().hour
+            count = item.select_one(".notice").text.strip()
 
-            return (timestamp, count)
+
+            return (timestamp, weekday, hour, count)
     return None
