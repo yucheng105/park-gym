@@ -1,6 +1,6 @@
 # Best Time to Go to the Gym
 - Collect Stats of number of people in the gym
-- Use stats to determine the best time to go
+- GitHub Actions autonomous activation of scripts
 
 # File Guide
 ```bash
@@ -8,7 +8,11 @@
     /data-collection
         GetPeopleCount.py
         main.py
-        gym_count.csv
-    /prediction
-
+    gym_count.csv
+    README.md
+    requirements.txt
 ```
+
+# Caution: Time is UTC time
+- Time Format is (UTC)
+- Taiwan is (UTC+8)
